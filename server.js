@@ -52,7 +52,32 @@
      */
     server.listen(port, () => console.log(`API running on localhost:${port}`));
 
+
     var settings = {"api_key": "70fa9c87529dc0cd4e5dc150938f744e"};
+
+const json = require('./feedback.json');
+
+var comments = new Map();
+var batchInput = [];
+
+for (var i in json) {
+
+    if (json[i].comments.toString().length > 0) {
+        comments[json[i]["responseId"]] = json[i].comments;
+        batchInput.push(json[i].comments)
+    }
+}
+
+
+// var batchInput = [
+//     "This app is so shit",
+//     "I can't pay my bill",
+//     "I can't login since new update",
+//     "Keeps crashing everytime I try to pay bills",
+//     "Great app! Best out of most telecoms",
+//     "keeps showing an error on offers page"
+// ];
+
 
     var batchInput = [
         "This app is not that great. Billing crashes sometimes",
@@ -172,18 +197,22 @@
                 positive.push(batchInput[i]);
                // console.log(positive);
             
-            }
-        }
 
-        console.log("Negative feedbacks for billing: " + negativeBill);
-        console.log("Negative feedbacks for login: " + negativeLogin);
-        console.log("Negative feedbacks for usage or plans: " + negativeUsagePlan);
-        console.log("Negative feedbacks for native devices: " + negativeNativeDevice);
-        console.log("Postive feedbacks: " + positive);
+}
+
+
+      
 
 
     }
                 
+  console.log("Negative feedbacks for billing: " + negativeBill);
+        console.log("Negative feedbacks for login: " + negativeLogin);
+        console.log("Negative feedbacks for usage or plans: " + negativeUsagePlan);
+        console.log("Negative feedbacks for native devices: " + negativeNativeDevice);
+        console.log("Postive feedbacks: " + positive);
+    }
+
 
     var logError = function(err) {
         console.log(err);
@@ -192,12 +221,3 @@
      indico.sentiment(batchInput, settings)
          .then(superResponse)
          .catch(logError);
-
-    // indico.emotion(batchInput, settings)
-    //     .then(emotionResponse)
-    //     .catch(logError);
-
-    // indico.keywords(batchInput, settings)
-    //     .then(keywordsResponse)
-    //     .catch(logError);
-
